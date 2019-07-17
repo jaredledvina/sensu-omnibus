@@ -37,6 +37,7 @@ if version && !source
     "2.4.4" => "440a89ad6a3b1b7a69b034233cc4658e",
     "2.4.5" => "5918319a439c33ac75fbbad7fd60749d",
     "2.4.8" => "dc77b51449dffe5b31776bff826bf559",
+    "2.7.9" => "173272ed55405caf7f858b6981fff526",
   }
 
   if solaris_10?
@@ -80,6 +81,12 @@ build do
 
   if source
     # Building from source:
+    # Delete rake.bat before running setup on windows to avoid a permissions issue
+    if windows?
+      block do
+        File.delete("C:/opt/sensu/embedded/bin/rake.bat")
+      end
+    end
     ruby "setup.rb --no-ri --no-rdoc", env: env
   else
     # Installing direct from rubygems:
